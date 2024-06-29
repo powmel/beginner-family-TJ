@@ -20,7 +20,7 @@ class MainApp(tk.Tk):
     # 「セッションを選ぶ」ページを表示するメソッド
     def show_session_page(self):
         self.hide_main_menu()
-        subprocess.Popen(["python", "session.py"])
+        subprocess.Popen(["python", "sessionSelecter.py"])
 
     # 「日記を書く・読む」ページを表示するメソッド
     def show_diary_page(self):
