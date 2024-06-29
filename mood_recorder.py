@@ -15,12 +15,19 @@ class MoodRecorderApp:
         self.date_entry = DateEntry(root, width=12, background='darkblue', foreground='white', borderwidth=2)
         self.date_entry.pack(pady=5)
 
-        self.label_time = tk.Label(root, text="Select the time (HH:MM):")
+        self.label_time = tk.Label(root, text="Select the time:")
         self.label_time.pack(pady=5)
 
-        self.time_entry = tk.Entry(root)
-        self.time_entry.insert(0, datetime.now().strftime("%H:%M"))
-        self.time_entry.pack(pady=5)
+        self.hours = [f"{h:02d}" for h in range(24)]
+        self.minutes = [f"{m:02d}" for m in range(60)]
+
+        self.hour_combobox = ttk.Combobox(root, values=self.hours, width=3, state="readonly")
+        self.hour_combobox.set(datetime.now().strftime("%H"))
+        self.hour_combobox.pack(side=tk.LEFT, padx=5)
+
+        self.minute_combobox = ttk.Combobox(root, values=self.minutes, width=3, state="readonly")
+        self.minute_combobox.set(datetime.now().strftime("%M"))
+        self.minute_combobox.pack(side=tk.LEFT, padx=5)
 
         self.label_health = tk.Label(root, text="How is your health?")
         self.label_health.pack(pady=5)
@@ -45,13 +52,10 @@ class MoodRecorderApp:
 
     def save_mood(self):
         date = self.date_entry.get()
-        time = self.time_entry.get()
-        try:
-            timestamp = datetime.strptime(f"{date} {time}", "%Y-%m-%d %H:%M")
-        except ValueError:
-            messagebox.showerror("Error", "Invalid time format. Please use HH:MM.")
-            return
-        
+        hour = self.hour_combobox.get()
+        minute = self.minute_combobox.get()
+        timestamp = f"{date} {hour}:{minute}"
+
         health = self.health_scale.get()
         mood = self.mood_scale.get()
         memo = self.textbox_memo.get("1.0", tk.END).strip()
@@ -70,4 +74,3 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = MoodRecorderApp(root)
     root.mainloop()
-
