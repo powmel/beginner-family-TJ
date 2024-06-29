@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import font
 import subprocess
 
 # メインアプリケーションクラス
@@ -7,53 +8,45 @@ class MainApp(tk.Tk):
         super().__init__()
 
         self.title("メイン画面")
-        self.geometry("300x200")
+        self.geometry("400x500")
+        
+        # カスタムフォントの作成
+        self.custom_font = font.Font(family="Arial", size=14, weight="bold")
+        
+        # タイトルラベル
+        self.title_label = tk.Label(self, text="メインメニュー", font=("Arial", 20))
+        self.title_label.pack(pady=20)
+
+        # ボタンフレームの作成
+        self.button_frame = tk.Frame(self)
+        self.button_frame.pack(expand=True)
 
         # 「セッションを選ぶ」ボタン
-        self.session_button = tk.Button(self, text="セッションを選ぶ", command=self.show_session_page, width=20, height=3)
-        self.session_button.pack(pady=20)
+        self.session_button = tk.Button(self.button_frame, text="セッションを選ぶ", command=self.show_session_page, font=self.custom_font, bg="#4CAF50", fg="white", width=20, height=2)
+        self.session_button.pack(pady=10)
 
-        # 「日記を書く・読む」ボタン
-        self.diary_button = tk.Button(self, text="日記を書く・読む", command=self.show_diary_page, width=20, height=3)
-        self.diary_button.pack(pady=20)
+        # 「日記を書く」ボタン
+        self.write_diary_button = tk.Button(self.button_frame, text="日記を書く", command=self.write_diary_page, font=self.custom_font, bg="#2196F3", fg="white", width=20, height=2)
+        self.write_diary_button.pack(pady=10)
+
+        # 「日記を読む」ボタン
+        self.read_diary_button = tk.Button(self.button_frame, text="日記を読む", command=self.read_diary_page, font=self.custom_font, bg="#FF5722", fg="white", width=20, height=2)
+        self.read_diary_button.pack(pady=10)
 
     # 「セッションを選ぶ」ページを表示するメソッド
     def show_session_page(self):
         self.destroy()  # メイン画面を削除
         subprocess.Popen(["python", "sessionSelecter.py"])  # sessionSelecter.py を実行
 
-    # 「日記を書く・読む」ページを表示するメソッド
-    def show_diary_page(self):
-        self.clear_screen()
-        DiaryPage(self)
+    # 「日記を書く」ページを表示するメソッド
+    def write_diary_page(self):
+        self.destroy()  # メイン画面を削除
+        subprocess.Popen(["python", "mood_recorder.py"])  # mood_recorder.py を実行
 
-    # 画面をクリアするメソッド
-    def clear_screen(self):
-        for widget in self.winfo_children():
-            widget.destroy()
-
-    # メインメニューを再表示するメソッド
-    def show_main_menu(self):
-        self.clear_screen()
-        self.session_button.pack(pady=20)
-        self.diary_button.pack(pady=20)
-
-# 「日記を書く・読む」ページクラス
-class DiaryPage(tk.Frame):
-    def __init__(self, parent):
-        super().__init__(parent)
-        self.parent = parent
-        self.pack()
-
-        self.label = tk.Label(self, text="日記を書く・読むページ")
-        self.label.pack(pady=20)
-
-        self.back_button = tk.Button(self, text="戻る", command=self.go_back)
-        self.back_button.pack(pady=20)
-
-    def go_back(self):
-        self.pack_forget()
-        self.parent.show_main_menu()
+    # 「日記を読む」ページを表示するメソッド
+    def read_diary_page(self):
+        self.destroy()  # メイン画面を削除
+        subprocess.Popen(["python", "mood_viewer.py"])  # mood_viewer.py を実行
 
 if __name__ == "__main__":
     app = MainApp()
