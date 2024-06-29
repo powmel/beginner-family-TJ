@@ -19,21 +19,22 @@ class MainApp(tk.Tk):
 
     # 「セッションを選ぶ」ページを表示するメソッド
     def show_session_page(self):
-        self.hide_main_menu()
-        subprocess.Popen(["python", "sessionSelecter.py"])
+        self.destroy()  # メイン画面を削除
+        subprocess.Popen(["python", "sessionSelecter.py"])  # sessionSelecter.py を実行
 
     # 「日記を書く・読む」ページを表示するメソッド
     def show_diary_page(self):
-        self.hide_main_menu()
+        self.clear_screen()
         DiaryPage(self)
 
-    # メインメニューを隠すメソッド
-    def hide_main_menu(self):
-        self.session_button.pack_forget()
-        self.diary_button.pack_forget()
+    # 画面をクリアするメソッド
+    def clear_screen(self):
+        for widget in self.winfo_children():
+            widget.destroy()
 
     # メインメニューを再表示するメソッド
     def show_main_menu(self):
+        self.clear_screen()
         self.session_button.pack(pady=20)
         self.diary_button.pack(pady=20)
 
