@@ -31,6 +31,10 @@ class SessionSelector:
         self.create_session_frame('セッション2', 'skyblue')
         self.create_session_frame('セッション3', 'lightcoral')
 
+        # スタート画面に戻るボタン
+        back_button = ttk.Button(self.master, text="スタート画面に戻る", command=self.return_to_start)
+        back_button.pack(pady=20, side='bottom')
+
     def create_session_frame(self, session_name, color):
         frame = tk.Frame(self.master, bg=color, padx=10, pady=10)
         frame.pack(fill='both', expand=True, padx=10, pady=5)
@@ -54,6 +58,9 @@ class SessionSelector:
 
     def on_chat_close(self, chat_window):
         chat_window.destroy()
+        self.master.deiconify()  # メインウィンドウを再表示
+
+    def return_to_start(self):
         self.master.deiconify()  # メインウィンドウを再表示
 
 if __name__ == "__main__":
