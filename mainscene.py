@@ -17,7 +17,7 @@ class MainApp(tk.Tk):
         self.custom_font = font.Font(family="Arial", size=14)
         
         # タイトルラベル
-        self.title_label = tk.Label(self, text="メインメニュー", font=("Arial", 20), bg="#FFF4E0", fg="#543E27")  # 背景色と文字色を設定
+        self.title_label = tk.Label(self, text="メンタル反省サロン", font=("Arial", 20), bg="#FFF4E0", fg="#543E27")  # 背景色と文字色を設定
         self.title_label.pack(pady=20)
 
         # ボタンフレームの作成
