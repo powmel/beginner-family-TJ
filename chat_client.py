@@ -43,7 +43,7 @@ class ChatClient:
         self.message_entry.pack(side=tk.LEFT, fill=tk.X, expand=True)
 
         self.send_button = tk.Button(self.input_frame, text="送信", command=self.send_message, 
-                                     bg='#4CAF50', fg='white', font=self.input_font)
+                                     bg='#4CAF50', fg='black', font=self.input_font)
         self.send_button.pack(side=tk.RIGHT, padx=(10, 0))
 
     def setup_network(self):
