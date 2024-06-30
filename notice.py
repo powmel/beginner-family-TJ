@@ -1,91 +1,78 @@
 import tkinter as tk
 from tkinter import messagebox
+import time
+import threading
 from datetime import datetime, timedelta
-import win32com.client
+import os
 
-class DiaryApp:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Diary App")
+# 日記ログのファイルパス
+LOG_FILE = "mood_log.txt"
 
-        self.button_frame = tk.Frame(self.root)
-        self.button_frame.pack(pady=20)
+def read_file_with_encodings(file_path, encodings):
+    for encoding in encodings:
+        try:
+            with open(file_path, "r", encoding=encoding) as file:
+                return file.readlines()
+        except UnicodeDecodeError:
+            continue
+    raise UnicodeDecodeError(f"Unable to decode file using provided encodings: {encodings}")
 
-        self.write_diary_button = tk.Button(self.button_frame, text="日記を書く", command=self.show_write_diary_page)
-        self.write_diary_button.pack(side=tk.RIGHT, padx=10)
+def read_mood_log():
+    records = []
+    try:
+        lines = read_file_with_encodings(LOG_FILE, ["utf-8", "utf-8-sig", "cp932", "shift_jis"])
+        current_record = []
+        current_date = None
+        for line in lines:
+            if line.strip() == "":
+                if current_record:
+                    records.append(current_record)
+                current_record = []
+            elif line.startswith("20"):  # assuming date lines start with '20'
+                current_date = line.strip()
+                current_record = [current_date]
+            else:
+                current_record.append(line.strip())
+        if current_record:
+            records.append(current_record)
+    except UnicodeDecodeError as e:
+        print(e)
+    return records
 
-    def show_write_diary_page(self):
-        self.diary_window = tk.Toplevel(self.root)
-        self.diary_window.title("Write Diary")
+def check_mood(records):
+    reminders = []
+    for record in records:
+        if len(record) > 2 and "Health: 1/5" in record[1] and "Mood: 1/5" in record[2]:
+            date_str = record[0]
+            date_obj = datetime.strptime(date_str, "%Y/%m/%d %H:%M")
+            next_day = date_obj + timedelta(days=1)
+            reminders.append(next_day.strftime("%Y/%m/%d %H:%M"))
+    print("Reminders set for: ", reminders)  # デバッグ用のログ出力
+    return reminders
 
-        tk.Label(self.diary_window, text="Date/Time:").pack()
-        self.datetime_entry = tk.Entry(self.diary_window)
-        self.datetime_entry.pack()
+def show_notification():
+    response = messagebox.showinfo("通知", "気分はどうですか？日記を書きましょう")
+    root.quit()
 
-        tk.Label(self.diary_window, text="Health (1-5):").pack()
-        self.health_entry = tk.Entry(self.diary_window)
-        self.health_entry.pack()
+def check_time(reminders):
+    while True:
+        current_time = datetime.now().strftime('%Y/%m/%d %H:%M')
+        print("Current time: ", current_time)  # デバッグ用のログ出力
+        if current_time in reminders:
+            show_notification()
+            break
+        time.sleep(60)  # 1分ごとに時間をチェック
 
-        tk.Label(self.diary_window, text="Mood (1-5):").pack()
-        self.mood_entry = tk.Entry(self.diary_window)
-        self.mood_entry.pack()
+# メインウィンドウの作成
+root = tk.Tk()
+root.title("時間指定通知アプリ")
 
-        tk.Label(self.diary_window, text="Memo:").pack()
-        self.memo_entry = tk.Entry(self.diary_window)
-        self.memo_entry.pack()
+# 日記ログを読み込んで通知時間をチェック
+records = read_mood_log()
+reminders = check_mood(records)
 
-        submit_button = tk.Button(self.diary_window, text="Submit", command=self.submit_diary)
-        submit_button.pack(pady=10)
+# 指定時間になったら通知を表示する関数をスレッドで実行
+threading.Thread(target=check_time, args=(reminders,)).start()
 
-    def submit_diary(self):
-        datetime_str = self.datetime_entry.get()
-        health = int(self.health_entry.get())
-        mood = int(self.mood_entry.get())
-        memo = self.memo_entry.get()
-
-        diary_entry = f"{datetime_str}\nhealth: {health}/5\nmood: {mood}/5\nmemo: {memo}"
-        print(diary_entry)
-
-        # Check if notification needs to be scheduled
-        if health == 1 or mood == 1:
-            datetime_obj = datetime.strptime(datetime_str, '%Y/%m/%d %H:%M')
-            notification_time = datetime_obj + timedelta(days=1)
-            self.schedule_notification(notification_time)
-
-        self.diary_window.destroy()
-
-    def schedule_notification(self, notification_time):
-        # Windowsタスクスケジューラにタスクを追加
-        scheduler = win32com.client.Dispatch('Schedule.Service')
-        scheduler.Connect()
-        rootFolder = scheduler.GetFolder('\\')
-
-        taskDef = scheduler.NewTask(0)
-
-        # Create trigger
-        trigger = taskDef.Triggers.Create(1)  # 1 = OneTimeTrigger
-        trigger.StartBoundary = notification_time.isoformat()
-
-        # Create action
-        action = taskDef.Actions.Create(0)  # 0 = Execute
-        action.Path = 'python'
-        action.Arguments = 'C:\\path\\to\\notice.py'
-
-        # Set parameters
-        taskDef.RegistrationInfo.Description = 'Health or Mood Notification'
-        taskDef.Settings.Enabled = True
-        taskDef.Settings.StopIfGoingOnBatteries = False
-
-        rootFolder.RegisterTaskDefinition(
-            'HealthMoodNotification',
-            taskDef,
-            6,  # 6 = TASK_CREATE_OR_UPDATE
-            None,
-            None,
-            3,  # 3 = TASK_LOGON_INTERACTIVE_TOKEN
-        )
-
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = DiaryApp(root)
-    root.mainloop()
+# メインループの開始
+root.mainloop()
