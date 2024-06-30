@@ -10,9 +10,11 @@ class MoodViewerApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Mood Viewer")
+        self.root.configure(bg="#FFF4E0")  # 背景色を設定
 
-        self.label = tk.Label(root, text="日付を選択して記録を表示:")
+        self.label = tk.Label(root, text="日付を選択して記録を表示:", bg="#FFF4E0")
         self.label.pack(pady=10)
+
 
         self.calendar = Calendar(root, selectmode='day', year=datetime.now().year, month=datetime.now().month, day=datetime.now().day)
         self.calendar.pack(pady=10)
@@ -26,7 +28,7 @@ class MoodViewerApp:
 
         # スクロール可能なフレームを作成
         self.frame = ttk.Frame(root)
-        self.canvas = tk.Canvas(self.frame)
+        self.canvas = tk.Canvas(self.frame, bg="#FFF4E0")
         self.scrollbar = ttk.Scrollbar(self.frame, orient="vertical", command=self.canvas.yview)
         self.scrollable_frame = ttk.Frame(self.canvas)
 
@@ -45,7 +47,7 @@ class MoodViewerApp:
         self.scrollbar.pack(side="right", fill="y")
 
         # ボタンフレームの作成
-        self.button_frame = tk.Frame(root)
+        self.button_frame = tk.Frame(root, bg="#FFF4E0")
         self.button_frame.pack(pady=20, side=tk.BOTTOM)
 
         # メイン画面に戻るボタン
