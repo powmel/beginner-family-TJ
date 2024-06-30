@@ -4,11 +4,11 @@ import subprocess
 import os
 from chat_client import ChatClient
 
-
 class SessionSelector:
     def __init__(self, master):
         self.master = master
         self.master.title("セッションを選ぼう")
+        self.master.configure(bg="#FFF4E0")  # メインウィンドウの背景色を変更
         
         self.username = tk.StringVar()
         
@@ -16,23 +16,23 @@ class SessionSelector:
 
     def create_widgets(self):
         # ユーザー名入力フレーム
-        username_frame = tk.Frame(self.master, pady=10)
+        username_frame = tk.Frame(self.master, pady=10, bg="#FFF4E0")  # 背景色を設定
         username_frame.pack(fill='x', padx=10)
 
-        username_label = tk.Label(username_frame, text="ユーザー名:", font=("Arial", 12))
+        username_label = tk.Label(username_frame, text="ユーザー名:", font=("Arial", 12), bg="#FFF4E0", fg="#543E27")  # 背景色を設定
         username_label.pack(side='left', padx=(0, 10))
 
         username_entry = ttk.Entry(username_frame, textvariable=self.username, font=("Arial", 12))
         username_entry.pack(side='left', expand=True, fill='x')
 
         # タイトルラベル
-        title_label = tk.Label(self.master, text="セッションを選ぼう", font=("Arial", 14))
+        title_label = tk.Label(self.master, text="セッションを選ぼう", font=("Arial", 14), bg="#FFF4E0", fg="#543E27")  # 背景色を設定
         title_label.pack(pady=10)
 
         # セッションフレーム
-        self.create_session_frame('セッション1', 'lightblue')
-        self.create_session_frame('セッション2', 'skyblue')
-        self.create_session_frame('セッション3', 'lightcoral')
+        self.create_session_frame('セッション1', '#F99292')
+        self.create_session_frame('セッション2', '#FFBC61')
+        self.create_session_frame('セッション3', '#FFC679')
 
         # スタート画面に戻るボタン
         back_button = ttk.Button(self.master, text="スタート画面に戻る", command=self.return_to_start)
@@ -42,7 +42,7 @@ class SessionSelector:
         frame = tk.Frame(self.master, bg=color, padx=10, pady=10)
         frame.pack(fill='both', expand=True, padx=10, pady=5)
         
-        label = tk.Label(frame, text=session_name, bg=color, font=("Arial", 12))
+        label = tk.Label(frame, text=session_name, bg=color, font=("Arial", 12), fg="#543E27")  # 文字色を設定
         label.pack(side='left')
         
         button = ttk.Button(frame, text="参加する", command=lambda: self.join_session(session_name))
@@ -56,6 +56,7 @@ class SessionSelector:
         
         self.master.withdraw()  # メインウィンドウを隠す
         chat_window = tk.Toplevel(self.master)
+        chat_window.configure(bg="#FFF4E0")  # 新しいウィンドウの背景色を設定
         chat_client = ChatClient(chat_window, username, session_name)
         chat_window.protocol("WM_DELETE_WINDOW", lambda: self.on_chat_close(chat_window))
 
