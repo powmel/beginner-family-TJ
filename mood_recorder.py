@@ -75,7 +75,7 @@ class MoodRecorderApp:
         
         if memo:
             with open("mood_log.txt", "a") as file:
-                file.write(f"{timestamp}\n体調: {health}/5\n気分: {mood}/5\nメモ: {memo}\n\n")
+                file.write(f"{timestamp} Health: {health}/5 Mood: {mood}/5 Memo: {memo}\n\n")
             messagebox.showinfo("保存完了", "気分が記録されました。")
             self.textbox_memo.delete("1.0", tk.END)
             self.health_scale.set(1)
