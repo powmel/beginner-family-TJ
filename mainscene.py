@@ -3,7 +3,6 @@ from tkinter import font
 import subprocess
 import os
 
-
 # メインアプリケーションクラス
 class MainApp(tk.Tk):
     def __init__(self):
