@@ -3,6 +3,7 @@ from tkinter import messagebox
 from tkinter import ttk
 from tkcalendar import Calendar
 from datetime import datetime
+import subprocess  # Added to call mainscene.py and mood_viewer.py
 
 class MoodRecorderApp:
     def __init__(self, root):
@@ -45,15 +46,23 @@ class MoodRecorderApp:
         self.mood_scale.grid(row=3, column=1, pady=5, padx=5)
 
         self.label_memo = tk.Label(root, text="メモ（どんな状況だったか、何時に気分が悪かったかなど）")
-        self.label_memo.grid(row=4, column=0, columnspan=2, pady=10, padx=5)
+        self.label_memo.grid(row=4, column=0, columnspan=2, pady=5, padx=5)
+        
+        self.textbox_memo = tk.Text(root, height=5, width=40)
+        self.textbox_memo.grid(row=5, column=0, columnspan=2, pady=5, padx=5)
 
-        self.textbox_memo = tk.Text(root, height=10, width=50)
-        self.textbox_memo.grid(row=5, column=0, columnspan=2, pady=10, padx=5)
+        self.save_button = tk.Button(root, text="記録を保存", command=self.save_record)
+        self.save_button.grid(row=6, column=0, pady=5, padx=5)
 
-        self.save_button = tk.Button(root, text="保存", command=self.save_mood)
-        self.save_button.grid(row=6, column=0, columnspan=2, pady=10, padx=5)
+        self.view_button = tk.Button(root, text="記録を見る", command=self.view_record)
+        self.view_button.grid(row=6, column=1, pady=5, padx=5)
 
-    def save_mood(self):
+        # Adding the "Return to Main Screen" button
+        self.return_button = tk.Button(root, text="メイン画面に戻る", command=self.return_to_main)
+        self.return_button.grid(row=7, column=0, columnspan=2, pady=5, padx=5)
+
+
+    def save_record(self):
         date = self.calendar.get_date()
         hour = self.hour_combobox.get()
         minute = self.minute_combobox.get()
@@ -72,6 +81,16 @@ class MoodRecorderApp:
             self.mood_scale.set(1)
         else:
             messagebox.showwarning("警告", "メモを入力してください。")
+
+    def view_record(self):
+        # Placeholder for view logic
+        messagebox.showinfo("表示", "記録を表示します！")
+        self.root.destroy()
+        subprocess.Popen(["python", "mood_viewer.py"])  # Call mood_viewer.py
+
+    def return_to_main(self):
+        self.root.destroy()
+        subprocess.Popen(["python", "mainscene.py"])  # Call mainscene.py
 
 if __name__ == "__main__":
     root = tk.Tk()
