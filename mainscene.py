@@ -8,30 +8,38 @@ class MainApp(tk.Tk):
     def __init__(self):
         super().__init__()
 
+        # メイン画面の設定
         self.title("メイン画面")
         self.geometry("400x500")
+        self.configure(bg="#E6E6FA")  # 背景色を淡い青色に設定
         
-        # カスタムフォントの作成
+         # カスタムフォントの作成
         self.custom_font = font.Font(family="Arial", size=14, weight="bold")
         
         # タイトルラベル
-        self.title_label = tk.Label(self, text="メインメニュー", font=("Arial", 20))
+        self.title_label = tk.Label(self, text="メインメニュー", font=("Arial", 20), bg="#E6E6FA", fg="#00008B")  # 背景色と文字色を設定
         self.title_label.pack(pady=20)
 
         # ボタンフレームの作成
-        self.button_frame = tk.Frame(self)
+        self.button_frame = tk.Frame(self, bg="#E6E6FA")  # フレームの背景色を設定
         self.button_frame.pack(expand=True)
 
+        # ボタンの色設定
+        session_button_bg_color = "#B0E0E6"  # セッションを選ぶボタンの背景色
+        diary_write_button_bg_color = "#FFFACD"  # 日記を書くボタンの背景色
+        diary_read_button_bg_color = "#FFCC99"  # 日記を読むボタンの背景色
+        button_fg_color = "#00008B"  # ボタンの文字色
+
         # 「セッションを選ぶ」ボタン
-        self.session_button = tk.Button(self.button_frame, text="セッションを選ぶ", command=self.show_session_page, font=self.custom_font, bg="#4CAF50", fg="white", width=20, height=2)
+        self.session_button = tk.Button(self.button_frame, text="セッションを選ぶ", command=self.show_session_page, font=self.custom_font, bg=session_button_bg_color, fg=button_fg_color, width=20, height=2)
         self.session_button.pack(pady=10)
 
         # 「日記を書く」ボタン
-        self.write_diary_button = tk.Button(self.button_frame, text="日記を書く", command=self.write_diary_page, font=self.custom_font, bg="#2196F3", fg="white", width=20, height=2)
+        self.write_diary_button = tk.Button(self.button_frame, text="日記を書く", command=self.write_diary_page, font=self.custom_font, bg=diary_write_button_bg_color, fg=button_fg_color, width=20, height=2)
         self.write_diary_button.pack(pady=10)
 
         # 「日記を読む」ボタン
-        self.read_diary_button = tk.Button(self.button_frame, text="日記を読む", command=self.read_diary_page, font=self.custom_font, bg="#FF5722", fg="white", width=20, height=2)
+        self.read_diary_button = tk.Button(self.button_frame, text="日記を読む", command=self.read_diary_page, font=self.custom_font, bg=diary_read_button_bg_color, fg=button_fg_color, width=20, height=2)
         self.read_diary_button.pack(pady=10)
 
     # 「セッションを選ぶ」ページを表示するメソッド
