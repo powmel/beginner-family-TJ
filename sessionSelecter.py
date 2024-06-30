@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 import subprocess
 import os
+from chat_client import ChatClient
+
 
 class SessionSelector:
     def __init__(self, master):
