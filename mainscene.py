@@ -11,24 +11,24 @@ class MainApp(tk.Tk):
         # メイン画面の設定
         self.title("メイン画面")
         self.geometry("400x500")
-        self.configure(bg="#E6E6FA")  # 背景色を淡い青色に設定
+        self.configure(bg="#FFF4E0")  # 背景色を設定
         
          # カスタムフォントの作成
-        self.custom_font = font.Font(family="Arial", size=14, weight="bold")
+        self.custom_font = font.Font(family="Arial", size=14)
         
         # タイトルラベル
-        self.title_label = tk.Label(self, text="メインメニュー", font=("Arial", 20), bg="#E6E6FA", fg="#00008B")  # 背景色と文字色を設定
+        self.title_label = tk.Label(self, text="メインメニュー", font=("Arial", 20), bg="#FFF4E0", fg="#543E27")  # 背景色と文字色を設定
         self.title_label.pack(pady=20)
 
         # ボタンフレームの作成
-        self.button_frame = tk.Frame(self, bg="#E6E6FA")  # フレームの背景色を設定
+        self.button_frame = tk.Frame(self, bg="#FFF4E0")  # フレームの背景色を設定
         self.button_frame.pack(expand=True)
 
         # ボタンの色設定
-        session_button_bg_color = "#B0E0E6"  # セッションを選ぶボタンの背景色
-        diary_write_button_bg_color = "#FFFACD"  # 日記を書くボタンの背景色
-        diary_read_button_bg_color = "#FFCC99"  # 日記を読むボタンの背景色
-        button_fg_color = "#00008B"  # ボタンの文字色
+        session_button_bg_color = "#F99292"  # セッションを選ぶボタンの背景色
+        diary_write_button_bg_color = "#FFBC61"  # 日記を書くボタンの背景色
+        diary_read_button_bg_color = "#FFC679"  # 日記を読むボタンの背景色
+        button_fg_color = "#543E27"  # ボタンの文字色
 
         # 「セッションを選ぶ」ボタン
         self.session_button = tk.Button(self.button_frame, text="セッションを選ぶ", command=self.show_session_page, font=self.custom_font, bg=session_button_bg_color, fg=button_fg_color, width=20, height=2)
