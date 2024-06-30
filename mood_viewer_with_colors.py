@@ -55,14 +55,14 @@ class MoodViewerApp:
                         self.calendar.tag_config('recorded', background='lightblue')
                         self.calendar.calevent_create(date, '', tags='recorded')
 
-def show_mood(self):
-    selected_date = self.calendar.get_date()
-    self.textbox.delete("1.0", tk.END)
-    if selected_date in self.records:
-        for entry in self.records[selected_date]:
-            self.textbox.insert(tk.END, entry + "\n")
-    else:
-        self.textbox.insert(tk.END, "記録がありません。")
+    def show_mood(self):
+        selected_date = self.calendar.get_date()
+        self.textbox.delete("1.0", tk.END)
+        if selected_date in self.records:
+            for entry in self.records[selected_date]:
+                self.textbox.insert(tk.END, entry + "\n")
+        else:
+            self.textbox.insert(tk.END, "記録がありません。")
 
 
 if __name__ == "__main__":
