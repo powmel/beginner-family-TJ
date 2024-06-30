@@ -2,6 +2,7 @@ import tkinter as tk
 from tkcalendar import Calendar, DateEntry
 from datetime import datetime
 import os
+import subprocess
 
 class MoodViewerApp:
     def __init__(self, root):
@@ -19,6 +20,21 @@ class MoodViewerApp:
 
         self.textbox = tk.Text(root, height=10, width=50)
         self.textbox.pack(pady=10)
+
+        # ボタンフレームの作成
+        self.button_frame = tk.Frame(root)
+        self.button_frame.pack(pady=20, side=tk.BOTTOM)
+
+        # メイン画面に戻るボタン
+        self.back_button = tk.Button(self.button_frame, text="メイン画面に戻る", command=self.show_main_page)
+        self.back_button.pack(side=tk.LEFT, padx=10)
+
+        # 日記を書くボタン
+        self.write_diary_button = tk.Button(self.button_frame, text="日記を書く", command=self.show_write_diary_page)
+        self.write_diary_button.pack(side=tk.RIGHT, padx=10)
+
+
+
 
         self.load_records()
 
@@ -48,6 +64,16 @@ class MoodViewerApp:
                 self.textbox.insert(tk.END, entry + "\n")
         else:
             self.textbox.insert(tk.END, "記録がありません。")
+
+        
+    def show_main_page(self):
+        self.root.destroy()
+        subprocess.Popen(["python", "mainscene.py"])  # main.py を実行
+
+    def show_write_diary_page(self):
+        self.root.destroy()
+        subprocess.Popen(["python", "mood_recorder.py"])  # mood_recorder.py を実行
+
 
 if __name__ == "__main__":
     root = tk.Tk()
