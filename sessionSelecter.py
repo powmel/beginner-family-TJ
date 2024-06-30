@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-from chat_client import ChatClient
+import subprocess
+import os
 
 class SessionSelector:
     def __init__(self, master):
@@ -61,7 +62,9 @@ class SessionSelector:
         self.master.deiconify()  # メインウィンドウを再表示
 
     def return_to_start(self):
-        self.master.deiconify()  # メインウィンドウを再表示
+        self.master.destroy()  # 現在のウィンドウを削除
+        script_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "mainscene.py"))
+        subprocess.Popen(["python", script_path])  # mainscene.py を実行
 
 if __name__ == "__main__":
     root = tk.Tk()

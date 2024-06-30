@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import font
 import subprocess
+import os
 
 # メインアプリケーションクラス
 class MainApp(tk.Tk):
@@ -36,17 +37,20 @@ class MainApp(tk.Tk):
     # 「セッションを選ぶ」ページを表示するメソッド
     def show_session_page(self):
         self.destroy()  # メイン画面を削除
-        subprocess.Popen(["python", "sessionSelecter.py"])  # sessionSelecter.py を実行
+        script_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "sessionSelecter.py"))
+        subprocess.Popen(["python", script_path])  # sessionSelecter.py を実行
 
     # 「日記を書く」ページを表示するメソッド
     def write_diary_page(self):
         self.destroy()  # メイン画面を削除
-        subprocess.Popen(["python", "mood_recorder.py"])  # mood_recorder.py を実行
+        script_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "mood_recorder.py"))
+        subprocess.Popen(["python", script_path])  # mood_recorder.py を実行
 
     # 「日記を読む」ページを表示するメソッド
     def read_diary_page(self):
         self.destroy()  # メイン画面を削除
-        subprocess.Popen(["python", "mood_viewer.py"])  # mood_viewer.py を実行
+        script_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "mood_viewer.py"))
+        subprocess.Popen(["python", script_path])  # mood_viewer.py を実行
 
 if __name__ == "__main__":
     app = MainApp()
