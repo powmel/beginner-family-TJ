@@ -1,0 +1,4 @@
+# ignore build files
+__pycache__/
+# ignore code runner files
+tmpCodeRunnerFile.py
