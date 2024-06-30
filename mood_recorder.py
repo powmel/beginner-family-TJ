@@ -48,8 +48,8 @@ class MoodRecorderApp:
         self.label_memo = tk.Label(root, text="メモ（どんな状況だったか、何時に気分が悪かったかなど）")
         self.label_memo.grid(row=4, column=0, columnspan=2, pady=5, padx=5)
         
-        self.memo_text = tk.Text(root, height=5, width=40)
-        self.memo_text.grid(row=5, column=0, columnspan=2, pady=5, padx=5)
+        self.textbox_memo = tk.Text(root, height=5, width=40)
+        self.textbox_memo.grid(row=5, column=0, columnspan=2, pady=5, padx=5)
 
         self.save_button = tk.Button(root, text="記録を保存", command=self.save_record)
         self.save_button.grid(row=6, column=0, pady=5, padx=5)
@@ -61,9 +61,26 @@ class MoodRecorderApp:
         self.return_button = tk.Button(root, text="メイン画面に戻る", command=self.return_to_main)
         self.return_button.grid(row=7, column=0, columnspan=2, pady=5, padx=5)
 
+
     def save_record(self):
-        # Placeholder for save logic
-        messagebox.showinfo("保存", "記録が保存されました！")
+        date = self.calendar.get_date()
+        hour = self.hour_combobox.get()
+        minute = self.minute_combobox.get()
+        timestamp = f"{date} {hour}:{minute}"
+
+        health = self.health_scale.get()
+        mood = self.mood_scale.get()
+        memo = self.textbox_memo.get("1.0", tk.END).strip()
+        
+        if memo:
+            with open("mood_log.txt", "a") as file:
+                file.write(f"{timestamp}\n体調: {health}/5\n気分: {mood}/5\nメモ: {memo}\n\n")
+            messagebox.showinfo("保存完了", "気分が記録されました。")
+            self.textbox_memo.delete("1.0", tk.END)
+            self.health_scale.set(1)
+            self.mood_scale.set(1)
+        else:
+            messagebox.showwarning("警告", "メモを入力してください。")
 
     def view_record(self):
         # Placeholder for view logic
